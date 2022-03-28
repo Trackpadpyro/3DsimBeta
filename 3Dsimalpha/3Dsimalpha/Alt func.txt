@@ -1,0 +1,74 @@
+void organize() {
+	vector<vector<float>> pos;
+	float k;
+	vector<float> n(3);
+	//calculate the position of each thing to render
+	for (int i = 0; i < type.size(); i++) {
+		if (type[i] == 0) {
+			pos.push_back({ p1[i][2],0,0 });
+		}
+		else if (type[i] == 1) {
+			if (p1[i][2] < p2[i][2]) {
+				pos.push_back({ p1[i][2], p2[i][2], 0 });
+			}
+			else {
+				pos.push_back({ p2[i][2], p1[i][2], 0 });
+			}
+		}
+		else {
+			if (p1[i][2] > p2[i][2]) {
+				if (p2[i][2] > p3[i][2]) {
+					pos.push_back({ p3[i][2], p2[i][2], p1[i][2] });
+				}
+				else {
+					if (p3[i][2] > p1[i][2]) {
+						pos.push_back({ p2[i][2], p1[i][2], p3[i][2] });
+					}
+					else {
+						pos.push_back({ p2[i][2], p3[i][2], p1[i][2] });
+					}
+				}
+			}
+			else {
+				if (p2[i][2] < p3[i][2]) {
+					pos.push_back({ p1[i][2], p2[i][2], p3[i][2] });
+				}
+				else {
+					if (p3[i][2] > p1[i][2]) {
+						pos.push_back({ p1[i][2], p3[i][2], p2[i][2] });
+					}
+					else {
+						pos.push_back({ p3[i][2], p1[i][2], p2[i][2] });
+					}
+				}
+			}
+		}
+	}
+
+	//find an serial number for each
+	for (int i = 0; i < type.size(); i++) {
+		n = pos[0];
+		k = 0;
+		//loop through pos, find the smallest, record it in order, set its position to MAXINT, repeat
+		for (int j = 0; j < pos.size(); j++) {
+			if (n[0] > pos[j][0]) {
+				n = pos[j];
+				k = j;
+			}
+			else if (n[0] == pos[j][0]) {
+				if (n[1] > pos[j][1]) {
+					n = pos[j];
+					k = j;
+				}
+				else if (n[1] == pos[j][1]) {
+					if (n[2] > pos[j][2]) {
+						n = pos[j];
+						k = j;
+					}
+				}
+			}
+		}
+		order[i] = k;
+		pos[k] = { (float)MAXINT, (float)MAXINT, (float)MAXINT };
+	}
+}
